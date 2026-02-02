@@ -6,12 +6,11 @@ set -euo pipefail
 # ─────────────────────────────────────────────
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LABELS_DIR="${SCRIPT_DIR}/labels"
-DEFAULT_FILE="${LABELS_DIR}/default.json"
+DEFAULT_FILE="${SCRIPT_DIR}/labels/default.json"
 
 # Defaults
-PRESET="default"
 REPO=""
+EXTRA_FILE=""
 DELETE_DEFAULTS=false
 DRY_RUN=false
 
@@ -33,45 +32,24 @@ usage() {
 Usage: ./setup.sh [OPTIONS] [REPO]
 
 Apply a curated set of GitHub labels to a repository.
-Non-default presets automatically include all default labels plus area-specific labels.
 
 Arguments:
   REPO                Target repository (owner/repo). Omit to use current repo.
 
 Options:
-  -p, --preset NAME   Label preset: default, rust-cli, web-app (default: default)
+  -e, --extra FILE    Merge additional labels from a JSON file (e.g. area labels)
   -d, --delete-defaults  Remove GitHub's built-in labels first
   -n, --dry-run       Show what would be done without making changes
-  -l, --list-presets  List available presets and exit
   -h, --help          Show this help message
 
 Examples:
-  ./setup.sh                                      # Current repo, default preset
-  ./setup.sh user/repo                            # Specific repo, default preset
-  ./setup.sh user/repo -p rust-cli -d             # Rust CLI preset, delete defaults
-  ./setup.sh user/repo --dry-run --delete-defaults
+  ./setup.sh                                        # Default labels only
+  ./setup.sh user/repo -d                           # Delete defaults, apply base labels
+  ./setup.sh user/repo -e examples/rust-cli.json    # Base + Rust CLI area labels
+  ./setup.sh user/repo -e my-areas.json --dry-run   # Preview with custom area labels
 USAGE
 }
 
-list_presets() {
-  local default_count
-  default_count="$(jq length "${DEFAULT_FILE}")"
-
-  echo "Available presets:"
-  echo ""
-  for f in "${LABELS_DIR}"/*.json; do
-    name="$(basename "${f}" .json)"
-    count="$(jq length "${f}")"
-    if [[ "${name}" == "default" ]]; then
-      echo "  ${name}    (${count} labels)"
-    else
-      total=$((default_count + count))
-      echo "  ${name}  (${total} labels = default ${default_count} + area ${count})"
-    fi
-  done
-}
-
-log_info() { echo "  [info] $*"; }
 log_create() { echo "  [+] $*"; }
 log_update() { echo "  [~] $*"; }
 log_delete() { echo "  [-] $*"; }
@@ -83,10 +61,9 @@ log_dry() { echo "  [dry-run] $*"; }
 # ─────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    -p|--preset) PRESET="$2"; shift 2 ;;
+    -e|--extra) EXTRA_FILE="$2"; shift 2 ;;
     -d|--delete-defaults) DELETE_DEFAULTS=true; shift ;;
     -n|--dry-run) DRY_RUN=true; shift ;;
-    -l|--list-presets) list_presets; exit 0 ;;
     -h|--help) usage; exit 0 ;;
     -*) echo "Unknown option: $1"; usage; exit 1 ;;
     *) REPO="$1"; shift ;;
@@ -97,15 +74,6 @@ done
 REPO_FLAG=()
 if [[ -n "${REPO}" ]]; then
   REPO_FLAG=(-R "${REPO}")
-fi
-
-# Validate preset file
-PRESET_FILE="${LABELS_DIR}/${PRESET}.json"
-if [[ ! -f "${PRESET_FILE}" ]]; then
-  echo "Error: preset '${PRESET}' not found at ${PRESET_FILE}"
-  echo ""
-  list_presets
-  exit 1
 fi
 
 # Check dependencies
@@ -119,13 +87,24 @@ if ! command -v jq &>/dev/null; then
   exit 1
 fi
 
+# Validate files
+if [[ ! -f "${DEFAULT_FILE}" ]]; then
+  echo "Error: default labels not found at ${DEFAULT_FILE}"
+  exit 1
+fi
+
+if [[ -n "${EXTRA_FILE}" && ! -f "${EXTRA_FILE}" ]]; then
+  echo "Error: extra labels file not found: ${EXTRA_FILE}"
+  exit 1
+fi
+
 # ─────────────────────────────────────────────
-# Build merged label set (default + preset area labels)
+# Build merged label set
 # ─────────────────────────────────────────────
-if [[ "${PRESET}" == "default" ]]; then
-  LABELS_JSON="$(cat "${PRESET_FILE}")"
+if [[ -n "${EXTRA_FILE}" ]]; then
+  LABELS_JSON="$(jq -s 'add' "${DEFAULT_FILE}" "${EXTRA_FILE}")"
 else
-  LABELS_JSON="$(jq -s 'add' "${DEFAULT_FILE}" "${PRESET_FILE}")"
+  LABELS_JSON="$(cat "${DEFAULT_FILE}")"
 fi
 
 LABEL_COUNT="$(echo "${LABELS_JSON}" | jq length)"
@@ -136,7 +115,11 @@ LABEL_COUNT="$(echo "${LABELS_JSON}" | jq length)"
 TARGET="${REPO:-$(gh repo view --json nameWithOwner -q .nameWithOwner)}"
 echo ""
 echo "Target: ${TARGET}"
-echo "Preset: ${PRESET} (${LABEL_COUNT} labels)"
+if [[ -n "${EXTRA_FILE}" ]]; then
+  echo "Labels: default ($(jq length "${DEFAULT_FILE}")) + $(basename "${EXTRA_FILE}") ($(jq length "${EXTRA_FILE}")) = ${LABEL_COUNT}"
+else
+  echo "Labels: default (${LABEL_COUNT})"
+fi
 echo "Delete defaults: ${DELETE_DEFAULTS}"
 echo "Dry run: ${DRY_RUN}"
 echo ""
@@ -175,7 +158,7 @@ fi
 # ─────────────────────────────────────────────
 # Apply labels
 # ─────────────────────────────────────────────
-echo "--- Applying '${PRESET}' labels ---"
+echo "--- Applying labels ---"
 
 CREATED=0
 UPDATED=0

@@ -6,7 +6,7 @@ GitHub リポジトリにベストプラクティスに基づくラベルセッ�
 
 - **カテゴリ別色分け**: type (青系), status (ニュートラル), effort (緑系), priority (警告色)
 - **`~` 接頭辞ソート**: priority ラベルが常に右端に表示される
-- **プリセット合成**: `default` をベースに `rust-cli`, `web-app` の area ラベルを自動マージ
+- **拡張可能**: `--extra` で任意の追加ラベル JSON をマージ
 - **冪等**: 既存ラベルは更新、新規ラベルは作成
 - **dry-run**: `--dry-run` で変更内容を事前確認
 
@@ -18,45 +18,44 @@ GitHub リポジトリにベストプラクティスに基づくラベルセッ�
 ## 使い方
 
 ```bash
-# カレントリポジトリに default プリセットを適用
+# カレントリポジトリにベースラベルを適用
 ./setup.sh
 
 # 特定リポジトリに適用 + GitHub デフォルトラベルを削除
 ./setup.sh user/repo --delete-defaults
 
-# Rust CLI プロジェクト向けプリセット (default 18 + area 5 = 23 labels)
-./setup.sh user/repo --preset rust-cli
+# ベース + プロジェクト固有の area ラベルを追加
+./setup.sh user/repo --extra examples/rust-cli.json
+
+# 自作の area ラベルを使う
+./setup.sh user/repo --extra my-areas.json
 
 # 事前確認 (変更しない)
-./setup.sh user/repo --dry-run --delete-defaults
-
-# プリセット一覧
-./setup.sh --list-presets
+./setup.sh user/repo --extra examples/web-app.json --dry-run -d
 ```
 
 ## オプション
 
 | オプション | 短縮 | 説明 |
 |---|---|---|
-| `--preset NAME` | `-p` | プリセット選択 (default: `default`) |
+| `--extra FILE` | `-e` | 追加ラベル JSON をマージ |
 | `--delete-defaults` | `-d` | GitHub のデフォルトラベルを先に削除 |
 | `--dry-run` | `-n` | 実行せず結果だけ表示 |
-| `--list-presets` | `-l` | 利用可能なプリセット一覧 |
 | `--help` | `-h` | ヘルプ表示 |
 
-## プリセット構成
+## ファイル構成
 
 ```
-default.json (18 labels)     ← ベース。常に適用される
-rust-cli.json (5 labels)     ← area ラベルのみ。default + rust-cli = 23 labels
-web-app.json (5 labels)      ← area ラベルのみ。default + web-app = 23 labels
+labels/
+  default.json          ベースラベル (18 labels)。常に適用される
+examples/
+  rust-cli.json         Rust CLI 向け area ラベルの例 (5 labels)
+  web-app.json          Web アプリ向け area ラベルの例 (5 labels)
 ```
 
-`--preset rust-cli` を指定すると `default.json` + `rust-cli.json` が自動マージされる。
+`--extra` なしではベースラベルのみ。`--extra FILE` で任意の JSON をマージできる。
 
-## default (18 labels)
-
-すべてのプリセットのベース。
+## ベースラベル (18 labels)
 
 **type:** (青系グラデーション)
 
@@ -101,9 +100,11 @@ web-app.json (5 labels)      ← area ラベルのみ。default + web-app = 23 l
 | ![good first issue](https://img.shields.io/badge/good_first_issue-7057FF?style=flat-square) | `#7057FF` | Suitable for new contributors |
 | ![help wanted](https://img.shields.io/badge/help_wanted-008672?style=flat-square) | `#008672` | Community contributions welcome |
 
-## rust-cli (+5 area labels)
+## area ラベルの例 (examples/)
 
-default に `area:` カテゴリ (紫系グラデーション) を追加。Rust CLI プロジェクト向け。
+`--extra` で追加する area ラベルのサンプル。紫系グラデーション。
+
+**rust-cli.json:**
 
 | ラベル | 色 | 説明 |
 |---|---|---|
@@ -113,9 +114,7 @@ default に `area:` カテゴリ (紫系グラデーション) を追加。Rust 
 | ![area: output](https://img.shields.io/badge/area%3A_output-6F3A8A?style=flat-square) | `#6F3A8A` | Output formatting |
 | ![area: ci](https://img.shields.io/badge/area%3A_ci-4A1560?style=flat-square) | `#4A1560` | CI/CD pipeline |
 
-## web-app (+5 area labels)
-
-default に `area:` カテゴリ (紫系グラデーション) を追加。Web アプリ向け。
+**web-app.json:**
 
 | ラベル | 色 | 説明 |
 |---|---|---|
@@ -124,6 +123,22 @@ default に `area:` カテゴリ (紫系グラデーション) を追加。Web �
 | ![area: database](https://img.shields.io/badge/area%3A_database-9B59B6?style=flat-square) | `#9B59B6` | Database or data models |
 | ![area: infra](https://img.shields.io/badge/area%3A_infra-6F3A8A?style=flat-square) | `#6F3A8A` | Infrastructure or DevOps |
 | ![area: auth](https://img.shields.io/badge/area%3A_auth-4A1560?style=flat-square) | `#4A1560` | Authentication and authorization |
+
+## 独自の area ラベルを作る
+
+JSON ファイルを作成して `--extra` で渡すだけ:
+
+```json
+[
+  { "name": "area: api",      "color": "F0D4FF", "description": "API endpoints" },
+  { "name": "area: worker",   "color": "C792EA", "description": "Background jobs" },
+  { "name": "area: payments",  "color": "9B59B6", "description": "Payment processing" }
+]
+```
+
+```bash
+./setup.sh user/repo --extra my-areas.json -d
+```
 
 ## ラベル設計のルール
 
@@ -142,19 +157,6 @@ category: value
 - 同一カテゴリは同系色のグラデーション (明→暗で視認性を確保)
 - カテゴリ間で色が重複しない
 - priority は視認性重視 (赤=critical → 緑=low)
-
-### カスタムプリセットの追加
-
-`labels/` に area ラベルの JSON ファイルを追加するだけ:
-
-```json
-[
-  { "name": "area: custom1", "color": "F0D4FF", "description": "Your custom area 1" },
-  { "name": "area: custom2", "color": "9B59B6", "description": "Your custom area 2" }
-]
-```
-
-default ラベルは自動的にマージされる。
 
 ## ライセンス
 

@@ -19,9 +19,9 @@ jobs:
           scandir: .
           additional_files: setup.sh
 
-      - name: Validate JSON presets
+      - name: Validate JSON files
         run: |
-          for f in labels/*.json; do
+          for f in labels/*.json examples/*.json; do
             echo "Validating $f..."
             jq empty "$f"
           done
