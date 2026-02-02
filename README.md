@@ -50,21 +50,72 @@ GitHub リポジトリにベストプラクティスに基づくラベルセッ�
 
 汎用的なラベルセット。ほとんどのプロジェクトに使える。
 
-| カテゴリ | ラベル | 色の方針 |
+**type:** (青系グラデーション)
+
+| ラベル | 色 | 説明 |
 |---|---|---|
-| `type:` | bug, feature, enhancement, docs, maintenance | 青系グラデーション |
-| `status:` | triage, in progress, blocked, review | ニュートラル系 |
-| `effort:` | small, medium, large | 緑系グラデーション |
-| `~priority:` | critical, high, medium, low | 赤→黄→緑 (警告色) |
-| (特殊) | good first issue, help wanted | 固定色 |
+| `type: bug` | `#D93F0B` | Something isn't working |
+| `type: feature` | `#1D76DB` | New functionality |
+| `type: enhancement` | `#0075CA` | Improvement to existing feature |
+| `type: docs` | `#0052A3` | Documentation changes |
+| `type: maintenance` | `#003D7A` | Refactoring or tech debt |
+
+**status:** (ニュートラル系)
+
+| ラベル | 色 | 説明 |
+|---|---|---|
+| `status: triage` | `#D3D9E5` | Needs initial review |
+| `status: in progress` | `#F7D7E8` | Currently being worked on |
+| `status: blocked` | `#FF6B6B` | Cannot proceed due to blockers |
+| `status: review` | `#4ECDC4` | Awaiting review |
+
+**effort:** (緑系グラデーション)
+
+| ラベル | 色 | 説明 |
+|---|---|---|
+| `effort: small` | `#C2E59C` | A few hours of work |
+| `effort: medium` | `#7FBA00` | 1-2 days of work |
+| `effort: large` | `#1E7145` | 3+ days of work |
+
+**~priority:** (警告色 赤→黄→緑、`~` で右端ソート)
+
+| ラベル | 色 | 説明 |
+|---|---|---|
+| `~priority: critical` | `#FF0000` | Must fix immediately |
+| `~priority: high` | `#D93F0B` | Should be done soon |
+| `~priority: medium` | `#F9C513` | Important but not blocking |
+| `~priority: low` | `#0E8A16` | Backlog item |
+
+**特殊ラベル**
+
+| ラベル | 色 | 説明 |
+|---|---|---|
+| `good first issue` | `#7057FF` | Suitable for new contributors |
+| `help wanted` | `#008672` | Community contributions welcome |
 
 ### rust-cli (23 labels)
 
-Rust CLI プロジェクト向け。default に `area:` カテゴリ (cli, parser, error, output, ci) を追加。
+default に `area:` カテゴリ (紫系グラデーション) を追加。Rust CLI プロジェクト向け。
+
+| ラベル | 色 | 説明 |
+|---|---|---|
+| `area: cli` | `#E8B3FF` | CLI argument handling |
+| `area: parser` | `#D4A0F0` | Parsing and AST |
+| `area: error` | `#C08DE0` | Error handling and reporting |
+| `area: output` | `#AC7AD0` | Output formatting |
+| `area: ci` | `#9867C0` | CI/CD pipeline |
 
 ### web-app (23 labels)
 
-Web アプリ向け。default に `area:` カテゴリ (frontend, backend, database, infra, auth) を追加。
+default に `area:` カテゴリ (紫系グラデーション) を追加。Web アプリ向け。
+
+| ラベル | 色 | 説明 |
+|---|---|---|
+| `area: frontend` | `#E8B3FF` | UI/UX or client-side |
+| `area: backend` | `#D4A0F0` | Server or API |
+| `area: database` | `#C08DE0` | Database or data models |
+| `area: infra` | `#AC7AD0` | Infrastructure or DevOps |
+| `area: auth` | `#9867C0` | Authentication and authorization |
 
 ## ラベル設計のルール
 
