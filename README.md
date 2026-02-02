@@ -54,44 +54,44 @@ GitHub リポジトリにベストプラクティスに基づくラベルセッ�
 
 | ラベル | 色 | 説明 |
 |---|---|---|
-| `type: bug` | `#D93F0B` | Something isn't working |
-| `type: feature` | `#1D76DB` | New functionality |
-| `type: enhancement` | `#0075CA` | Improvement to existing feature |
-| `type: docs` | `#0052A3` | Documentation changes |
-| `type: maintenance` | `#003D7A` | Refactoring or tech debt |
+| ![type: bug](https://img.shields.io/badge/type%3A_bug-D93F0B?style=flat-square) | `#D93F0B` | Something isn't working |
+| ![type: feature](https://img.shields.io/badge/type%3A_feature-1D76DB?style=flat-square) | `#1D76DB` | New functionality |
+| ![type: enhancement](https://img.shields.io/badge/type%3A_enhancement-0075CA?style=flat-square) | `#0075CA` | Improvement to existing feature |
+| ![type: docs](https://img.shields.io/badge/type%3A_docs-0052A3?style=flat-square) | `#0052A3` | Documentation changes |
+| ![type: maintenance](https://img.shields.io/badge/type%3A_maintenance-003D7A?style=flat-square) | `#003D7A` | Refactoring or tech debt |
 
 **status:** (ニュートラル系)
 
 | ラベル | 色 | 説明 |
 |---|---|---|
-| `status: triage` | `#D3D9E5` | Needs initial review |
-| `status: in progress` | `#F7D7E8` | Currently being worked on |
-| `status: blocked` | `#FF6B6B` | Cannot proceed due to blockers |
-| `status: review` | `#4ECDC4` | Awaiting review |
+| ![status: triage](https://img.shields.io/badge/status%3A_triage-D3D9E5?style=flat-square) | `#D3D9E5` | Needs initial review |
+| ![status: in progress](https://img.shields.io/badge/status%3A_in_progress-F7D7E8?style=flat-square) | `#F7D7E8` | Currently being worked on |
+| ![status: blocked](https://img.shields.io/badge/status%3A_blocked-FF6B6B?style=flat-square) | `#FF6B6B` | Cannot proceed due to blockers |
+| ![status: review](https://img.shields.io/badge/status%3A_review-4ECDC4?style=flat-square) | `#4ECDC4` | Awaiting review |
 
 **effort:** (緑系グラデーション)
 
 | ラベル | 色 | 説明 |
 |---|---|---|
-| `effort: small` | `#C2E59C` | A few hours of work |
-| `effort: medium` | `#7FBA00` | 1-2 days of work |
-| `effort: large` | `#1E7145` | 3+ days of work |
+| ![effort: small](https://img.shields.io/badge/effort%3A_small-C2E59C?style=flat-square) | `#C2E59C` | A few hours of work |
+| ![effort: medium](https://img.shields.io/badge/effort%3A_medium-7FBA00?style=flat-square) | `#7FBA00` | 1-2 days of work |
+| ![effort: large](https://img.shields.io/badge/effort%3A_large-1E7145?style=flat-square) | `#1E7145` | 3+ days of work |
 
 **~priority:** (警告色 赤→黄→緑、`~` で右端ソート)
 
 | ラベル | 色 | 説明 |
 |---|---|---|
-| `~priority: critical` | `#FF0000` | Must fix immediately |
-| `~priority: high` | `#D93F0B` | Should be done soon |
-| `~priority: medium` | `#F9C513` | Important but not blocking |
-| `~priority: low` | `#0E8A16` | Backlog item |
+| ![~priority: critical](https://img.shields.io/badge/~priority%3A_critical-FF0000?style=flat-square) | `#FF0000` | Must fix immediately |
+| ![~priority: high](https://img.shields.io/badge/~priority%3A_high-D93F0B?style=flat-square) | `#D93F0B` | Should be done soon |
+| ![~priority: medium](https://img.shields.io/badge/~priority%3A_medium-F9C513?style=flat-square) | `#F9C513` | Important but not blocking |
+| ![~priority: low](https://img.shields.io/badge/~priority%3A_low-0E8A16?style=flat-square) | `#0E8A16` | Backlog item |
 
 **特殊ラベル**
 
 | ラベル | 色 | 説明 |
 |---|---|---|
-| `good first issue` | `#7057FF` | Suitable for new contributors |
-| `help wanted` | `#008672` | Community contributions welcome |
+| ![good first issue](https://img.shields.io/badge/good_first_issue-7057FF?style=flat-square) | `#7057FF` | Suitable for new contributors |
+| ![help wanted](https://img.shields.io/badge/help_wanted-008672?style=flat-square) | `#008672` | Community contributions welcome |
 
 ### rust-cli (23 labels)
 
@@ -99,11 +99,11 @@ default に `area:` カテゴリ (紫系グラデーション) を追加。Rust 
 
 | ラベル | 色 | 説明 |
 |---|---|---|
-| `area: cli` | `#E8B3FF` | CLI argument handling |
-| `area: parser` | `#D4A0F0` | Parsing and AST |
-| `area: error` | `#C08DE0` | Error handling and reporting |
-| `area: output` | `#AC7AD0` | Output formatting |
-| `area: ci` | `#9867C0` | CI/CD pipeline |
+| ![area: cli](https://img.shields.io/badge/area%3A_cli-E8B3FF?style=flat-square) | `#E8B3FF` | CLI argument handling |
+| ![area: parser](https://img.shields.io/badge/area%3A_parser-D4A0F0?style=flat-square) | `#D4A0F0` | Parsing and AST |
+| ![area: error](https://img.shields.io/badge/area%3A_error-C08DE0?style=flat-square) | `#C08DE0` | Error handling and reporting |
+| ![area: output](https://img.shields.io/badge/area%3A_output-AC7AD0?style=flat-square) | `#AC7AD0` | Output formatting |
+| ![area: ci](https://img.shields.io/badge/area%3A_ci-9867C0?style=flat-square) | `#9867C0` | CI/CD pipeline |
 
 ### web-app (23 labels)
 
@@ -111,11 +111,11 @@ default に `area:` カテゴリ (紫系グラデーション) を追加。Web �
 
 | ラベル | 色 | 説明 |
 |---|---|---|
-| `area: frontend` | `#E8B3FF` | UI/UX or client-side |
-| `area: backend` | `#D4A0F0` | Server or API |
-| `area: database` | `#C08DE0` | Database or data models |
-| `area: infra` | `#AC7AD0` | Infrastructure or DevOps |
-| `area: auth` | `#9867C0` | Authentication and authorization |
+| ![area: frontend](https://img.shields.io/badge/area%3A_frontend-E8B3FF?style=flat-square) | `#E8B3FF` | UI/UX or client-side |
+| ![area: backend](https://img.shields.io/badge/area%3A_backend-D4A0F0?style=flat-square) | `#D4A0F0` | Server or API |
+| ![area: database](https://img.shields.io/badge/area%3A_database-C08DE0?style=flat-square) | `#C08DE0` | Database or data models |
+| ![area: infra](https://img.shields.io/badge/area%3A_infra-AC7AD0?style=flat-square) | `#AC7AD0` | Infrastructure or DevOps |
+| ![area: auth](https://img.shields.io/badge/area%3A_auth-9867C0?style=flat-square) | `#9867C0` | Authentication and authorization |
 
 ## ラベル設計のルール
 
