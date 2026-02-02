@@ -1,18 +1,18 @@
 [
   { "name": "type: bug",            "color": "D93F0B", "description": "Something isn't working" },
-  { "name": "type: feature",        "color": "1D76DB", "description": "New functionality" },
-  { "name": "type: enhancement",    "color": "0075CA", "description": "Improvement to existing feature" },
-  { "name": "type: docs",           "color": "0052A3", "description": "Documentation changes" },
-  { "name": "type: maintenance",    "color": "003D7A", "description": "Refactoring or tech debt" },
+  { "name": "type: feature",        "color": "58A6FF", "description": "New functionality" },
+  { "name": "type: enhancement",    "color": "1D76DB", "description": "Improvement to existing feature" },
+  { "name": "type: docs",           "color": "0550AE", "description": "Documentation changes" },
+  { "name": "type: maintenance",    "color": "023B6B", "description": "Refactoring or tech debt" },
 
   { "name": "status: triage",       "color": "D3D9E5", "description": "Needs initial review" },
   { "name": "status: in progress",  "color": "F7D7E8", "description": "Currently being worked on" },
   { "name": "status: blocked",      "color": "FF6B6B", "description": "Cannot proceed due to blockers" },
   { "name": "status: review",       "color": "4ECDC4", "description": "Awaiting review" },
 
-  { "name": "effort: small",        "color": "C2E59C", "description": "A few hours of work" },
-  { "name": "effort: medium",       "color": "7FBA00", "description": "1-2 days of work" },
-  { "name": "effort: large",        "color": "1E7145", "description": "3+ days of work" },
+  { "name": "effort: small",        "color": "C5F0A4", "description": "A few hours of work" },
+  { "name": "effort: medium",       "color": "3CB44B", "description": "1-2 days of work" },
+  { "name": "effort: large",        "color": "145A32", "description": "3+ days of work" },
 
   { "name": "~priority: critical",  "color": "FF0000", "description": "Must fix immediately" },
   { "name": "~priority: high",      "color": "D93F0B", "description": "Should be done soon" },

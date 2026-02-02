@@ -7,6 +7,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LABELS_DIR="${SCRIPT_DIR}/labels"
+DEFAULT_FILE="${LABELS_DIR}/default.json"
 
 # Defaults
 PRESET="default"
@@ -15,7 +16,7 @@ DELETE_DEFAULTS=false
 DRY_RUN=false
 
 # GitHub default labels to remove
-DEFAULT_LABELS=(
+GITHUB_DEFAULT_LABELS=(
   "bug"
   "documentation"
   "duplicate"
@@ -32,6 +33,7 @@ usage() {
 Usage: ./setup.sh [OPTIONS] [REPO]
 
 Apply a curated set of GitHub labels to a repository.
+Non-default presets automatically include all default labels plus area-specific labels.
 
 Arguments:
   REPO                Target repository (owner/repo). Omit to use current repo.
@@ -52,12 +54,20 @@ USAGE
 }
 
 list_presets() {
+  local default_count
+  default_count="$(jq length "${DEFAULT_FILE}")"
+
   echo "Available presets:"
   echo ""
   for f in "${LABELS_DIR}"/*.json; do
     name="$(basename "${f}" .json)"
     count="$(jq length "${f}")"
-    echo "  ${name}  (${count} labels)"
+    if [[ "${name}" == "default" ]]; then
+      echo "  ${name}    (${count} labels)"
+    else
+      total=$((default_count + count))
+      echo "  ${name}  (${total} labels = default ${default_count} + area ${count})"
+    fi
   done
 }
 
@@ -110,12 +120,23 @@ if ! command -v jq &>/dev/null; then
 fi
 
 # ─────────────────────────────────────────────
+# Build merged label set (default + preset area labels)
+# ─────────────────────────────────────────────
+if [[ "${PRESET}" == "default" ]]; then
+  LABELS_JSON="$(cat "${PRESET_FILE}")"
+else
+  LABELS_JSON="$(jq -s 'add' "${DEFAULT_FILE}" "${PRESET_FILE}")"
+fi
+
+LABEL_COUNT="$(echo "${LABELS_JSON}" | jq length)"
+
+# ─────────────────────────────────────────────
 # Fetch existing labels
 # ─────────────────────────────────────────────
 TARGET="${REPO:-$(gh repo view --json nameWithOwner -q .nameWithOwner)}"
 echo ""
 echo "Target: ${TARGET}"
-echo "Preset: ${PRESET} ($(jq length "${PRESET_FILE}") labels)"
+echo "Preset: ${PRESET} (${LABEL_COUNT} labels)"
 echo "Delete defaults: ${DELETE_DEFAULTS}"
 echo "Dry run: ${DRY_RUN}"
 echo ""
@@ -130,8 +151,8 @@ label_exists() {
 # Delete default labels
 # ─────────────────────────────────────────────
 if [[ "${DELETE_DEFAULTS}" == true ]]; then
-  echo "--- Removing default labels ---"
-  for label in "${DEFAULT_LABELS[@]}"; do
+  echo "--- Removing GitHub default labels ---"
+  for label in "${GITHUB_DEFAULT_LABELS[@]}"; do
     if label_exists "${label}"; then
       if [[ "${DRY_RUN}" == true ]]; then
         log_dry "would delete '${label}'"
@@ -152,19 +173,18 @@ if [[ "${DELETE_DEFAULTS}" == true ]]; then
 fi
 
 # ─────────────────────────────────────────────
-# Apply labels from preset
+# Apply labels
 # ─────────────────────────────────────────────
 echo "--- Applying '${PRESET}' labels ---"
 
-LABEL_COUNT="$(jq length "${PRESET_FILE}")"
 CREATED=0
 UPDATED=0
 SKIPPED=0
 
 for i in $(seq 0 $((LABEL_COUNT - 1))); do
-  NAME="$(jq -r ".[$i].name" "${PRESET_FILE}")"
-  COLOR="$(jq -r ".[$i].color" "${PRESET_FILE}")"
-  DESC="$(jq -r ".[$i].description" "${PRESET_FILE}")"
+  NAME="$(echo "${LABELS_JSON}" | jq -r ".[$i].name")"
+  COLOR="$(echo "${LABELS_JSON}" | jq -r ".[$i].color")"
+  DESC="$(echo "${LABELS_JSON}" | jq -r ".[$i].description")"
 
   if label_exists "${NAME}"; then
     if [[ "${DRY_RUN}" == true ]]; then

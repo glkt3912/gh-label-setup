@@ -6,7 +6,7 @@ GitHub リポジトリにベストプラクティスに基づくラベルセッ�
 
 - **カテゴリ別色分け**: type (青系), status (ニュートラル), effort (緑系), priority (警告色)
 - **`~` 接頭辞ソート**: priority ラベルが常に右端に表示される
-- **プリセット**: `default`, `rust-cli`, `web-app` から選択可能
+- **プリセット合成**: `default` をベースに `rust-cli`, `web-app` の area ラベルを自動マージ
 - **冪等**: 既存ラベルは更新、新規ラベルは作成
 - **dry-run**: `--dry-run` で変更内容を事前確認
 
@@ -24,7 +24,7 @@ GitHub リポジトリにベストプラクティスに基づくラベルセッ�
 # 特定リポジトリに適用 + GitHub デフォルトラベルを削除
 ./setup.sh user/repo --delete-defaults
 
-# Rust CLI プロジェクト向けプリセット
+# Rust CLI プロジェクト向けプリセット (default 18 + area 5 = 23 labels)
 ./setup.sh user/repo --preset rust-cli
 
 # 事前確認 (変更しない)
@@ -44,21 +44,29 @@ GitHub リポジトリにベストプラクティスに基づくラベルセッ�
 | `--list-presets` | `-l` | 利用可能なプリセット一覧 |
 | `--help` | `-h` | ヘルプ表示 |
 
-## プリセット
+## プリセット構成
 
-### default (18 labels)
+```
+default.json (18 labels)     ← ベース。常に適用される
+rust-cli.json (5 labels)     ← area ラベルのみ。default + rust-cli = 23 labels
+web-app.json (5 labels)      ← area ラベルのみ。default + web-app = 23 labels
+```
 
-汎用的なラベルセット。ほとんどのプロジェクトに使える。
+`--preset rust-cli` を指定すると `default.json` + `rust-cli.json` が自動マージされる。
+
+## default (18 labels)
+
+すべてのプリセットのベース。
 
 **type:** (青系グラデーション)
 
 | ラベル | 色 | 説明 |
 |---|---|---|
 | ![type: bug](https://img.shields.io/badge/type%3A_bug-D93F0B?style=flat-square) | `#D93F0B` | Something isn't working |
-| ![type: feature](https://img.shields.io/badge/type%3A_feature-1D76DB?style=flat-square) | `#1D76DB` | New functionality |
-| ![type: enhancement](https://img.shields.io/badge/type%3A_enhancement-0075CA?style=flat-square) | `#0075CA` | Improvement to existing feature |
-| ![type: docs](https://img.shields.io/badge/type%3A_docs-0052A3?style=flat-square) | `#0052A3` | Documentation changes |
-| ![type: maintenance](https://img.shields.io/badge/type%3A_maintenance-003D7A?style=flat-square) | `#003D7A` | Refactoring or tech debt |
+| ![type: feature](https://img.shields.io/badge/type%3A_feature-58A6FF?style=flat-square) | `#58A6FF` | New functionality |
+| ![type: enhancement](https://img.shields.io/badge/type%3A_enhancement-1D76DB?style=flat-square) | `#1D76DB` | Improvement to existing feature |
+| ![type: docs](https://img.shields.io/badge/type%3A_docs-0550AE?style=flat-square) | `#0550AE` | Documentation changes |
+| ![type: maintenance](https://img.shields.io/badge/type%3A_maintenance-023B6B?style=flat-square) | `#023B6B` | Refactoring or tech debt |
 
 **status:** (ニュートラル系)
 
@@ -73,9 +81,9 @@ GitHub リポジトリにベストプラクティスに基づくラベルセッ�
 
 | ラベル | 色 | 説明 |
 |---|---|---|
-| ![effort: small](https://img.shields.io/badge/effort%3A_small-C2E59C?style=flat-square) | `#C2E59C` | A few hours of work |
-| ![effort: medium](https://img.shields.io/badge/effort%3A_medium-7FBA00?style=flat-square) | `#7FBA00` | 1-2 days of work |
-| ![effort: large](https://img.shields.io/badge/effort%3A_large-1E7145?style=flat-square) | `#1E7145` | 3+ days of work |
+| ![effort: small](https://img.shields.io/badge/effort%3A_small-C5F0A4?style=flat-square) | `#C5F0A4` | A few hours of work |
+| ![effort: medium](https://img.shields.io/badge/effort%3A_medium-3CB44B?style=flat-square) | `#3CB44B` | 1-2 days of work |
+| ![effort: large](https://img.shields.io/badge/effort%3A_large-145A32?style=flat-square) | `#145A32` | 3+ days of work |
 
 **~priority:** (警告色 赤→黄→緑、`~` で右端ソート)
 
@@ -93,29 +101,29 @@ GitHub リポジトリにベストプラクティスに基づくラベルセッ�
 | ![good first issue](https://img.shields.io/badge/good_first_issue-7057FF?style=flat-square) | `#7057FF` | Suitable for new contributors |
 | ![help wanted](https://img.shields.io/badge/help_wanted-008672?style=flat-square) | `#008672` | Community contributions welcome |
 
-### rust-cli (23 labels)
+## rust-cli (+5 area labels)
 
 default に `area:` カテゴリ (紫系グラデーション) を追加。Rust CLI プロジェクト向け。
 
 | ラベル | 色 | 説明 |
 |---|---|---|
-| ![area: cli](https://img.shields.io/badge/area%3A_cli-E8B3FF?style=flat-square) | `#E8B3FF` | CLI argument handling |
-| ![area: parser](https://img.shields.io/badge/area%3A_parser-D4A0F0?style=flat-square) | `#D4A0F0` | Parsing and AST |
-| ![area: error](https://img.shields.io/badge/area%3A_error-C08DE0?style=flat-square) | `#C08DE0` | Error handling and reporting |
-| ![area: output](https://img.shields.io/badge/area%3A_output-AC7AD0?style=flat-square) | `#AC7AD0` | Output formatting |
-| ![area: ci](https://img.shields.io/badge/area%3A_ci-9867C0?style=flat-square) | `#9867C0` | CI/CD pipeline |
+| ![area: cli](https://img.shields.io/badge/area%3A_cli-F0D4FF?style=flat-square) | `#F0D4FF` | CLI argument handling |
+| ![area: parser](https://img.shields.io/badge/area%3A_parser-C792EA?style=flat-square) | `#C792EA` | Parsing and AST |
+| ![area: error](https://img.shields.io/badge/area%3A_error-9B59B6?style=flat-square) | `#9B59B6` | Error handling and reporting |
+| ![area: output](https://img.shields.io/badge/area%3A_output-6F3A8A?style=flat-square) | `#6F3A8A` | Output formatting |
+| ![area: ci](https://img.shields.io/badge/area%3A_ci-4A1560?style=flat-square) | `#4A1560` | CI/CD pipeline |
 
-### web-app (23 labels)
+## web-app (+5 area labels)
 
 default に `area:` カテゴリ (紫系グラデーション) を追加。Web アプリ向け。
 
 | ラベル | 色 | 説明 |
 |---|---|---|
-| ![area: frontend](https://img.shields.io/badge/area%3A_frontend-E8B3FF?style=flat-square) | `#E8B3FF` | UI/UX or client-side |
-| ![area: backend](https://img.shields.io/badge/area%3A_backend-D4A0F0?style=flat-square) | `#D4A0F0` | Server or API |
-| ![area: database](https://img.shields.io/badge/area%3A_database-C08DE0?style=flat-square) | `#C08DE0` | Database or data models |
-| ![area: infra](https://img.shields.io/badge/area%3A_infra-AC7AD0?style=flat-square) | `#AC7AD0` | Infrastructure or DevOps |
-| ![area: auth](https://img.shields.io/badge/area%3A_auth-9867C0?style=flat-square) | `#9867C0` | Authentication and authorization |
+| ![area: frontend](https://img.shields.io/badge/area%3A_frontend-F0D4FF?style=flat-square) | `#F0D4FF` | UI/UX or client-side |
+| ![area: backend](https://img.shields.io/badge/area%3A_backend-C792EA?style=flat-square) | `#C792EA` | Server or API |
+| ![area: database](https://img.shields.io/badge/area%3A_database-9B59B6?style=flat-square) | `#9B59B6` | Database or data models |
+| ![area: infra](https://img.shields.io/badge/area%3A_infra-6F3A8A?style=flat-square) | `#6F3A8A` | Infrastructure or DevOps |
+| ![area: auth](https://img.shields.io/badge/area%3A_auth-4A1560?style=flat-square) | `#4A1560` | Authentication and authorization |
 
 ## ラベル設計のルール
 
@@ -131,20 +139,22 @@ category: value
 
 ### 色の割り当て
 
-- 同一カテゴリは同系色のグラデーション
+- 同一カテゴリは同系色のグラデーション (明→暗で視認性を確保)
 - カテゴリ間で色が重複しない
 - priority は視認性重視 (赤=critical → 緑=low)
 
 ### カスタムプリセットの追加
 
-`labels/` に JSON ファイルを追加するだけ:
+`labels/` に area ラベルの JSON ファイルを追加するだけ:
 
 ```json
 [
-  { "name": "type: bug", "color": "D93F0B", "description": "Something isn't working" },
-  { "name": "area: custom", "color": "E8B3FF", "description": "Your custom area" }
+  { "name": "area: custom1", "color": "F0D4FF", "description": "Your custom area 1" },
+  { "name": "area: custom2", "color": "9B59B6", "description": "Your custom area 2" }
 ]
 ```
+
+default ラベルは自動的にマージされる。
 
 ## ライセンス
 
