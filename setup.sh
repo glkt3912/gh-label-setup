@@ -171,9 +171,13 @@ for i in $(seq 0 $((LABEL_COUNT - 1))); do
       log_dry "would update '${NAME}' (${COLOR})"
       ((UPDATED++))
     else
-      gh label edit "${NAME}" "${REPO_FLAG[@]}" --color "${COLOR}" --description "${DESC}" 2>/dev/null \
-        && { log_update "${NAME}"; ((UPDATED++)); } \
-        || { log_skip "'${NAME}' unchanged"; ((SKIPPED++)); }
+      if gh label edit "${NAME}" "${REPO_FLAG[@]}" --color "${COLOR}" --description "${DESC}" 2>/dev/null; then
+        log_update "${NAME}"
+        ((UPDATED++))
+      else
+        log_skip "'${NAME}' unchanged"
+        ((SKIPPED++))
+      fi
     fi
   else
     if [[ "${DRY_RUN}" == true ]]; then
