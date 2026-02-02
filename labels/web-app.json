@@ -1,0 +1,30 @@
+[
+  { "name": "type: bug",            "color": "D93F0B", "description": "Something isn't working" },
+  { "name": "type: feature",        "color": "1D76DB", "description": "New functionality" },
+  { "name": "type: enhancement",    "color": "0075CA", "description": "Improvement to existing feature" },
+  { "name": "type: docs",           "color": "0052A3", "description": "Documentation changes" },
+  { "name": "type: maintenance",    "color": "003D7A", "description": "Refactoring or tech debt" },
+
+  { "name": "area: frontend",       "color": "E8B3FF", "description": "UI/UX or client-side" },
+  { "name": "area: backend",        "color": "D4A0F0", "description": "Server or API" },
+  { "name": "area: database",       "color": "C08DE0", "description": "Database or data models" },
+  { "name": "area: infra",          "color": "AC7AD0", "description": "Infrastructure or DevOps" },
+  { "name": "area: auth",           "color": "9867C0", "description": "Authentication and authorization" },
+
+  { "name": "status: triage",       "color": "D3D9E5", "description": "Needs initial review" },
+  { "name": "status: in progress",  "color": "F7D7E8", "description": "Currently being worked on" },
+  { "name": "status: blocked",      "color": "FF6B6B", "description": "Cannot proceed due to blockers" },
+  { "name": "status: review",       "color": "4ECDC4", "description": "Awaiting review" },
+
+  { "name": "effort: small",        "color": "C2E59C", "description": "A few hours of work" },
+  { "name": "effort: medium",       "color": "7FBA00", "description": "1-2 days of work" },
+  { "name": "effort: large",        "color": "1E7145", "description": "3+ days of work" },
+
+  { "name": "~priority: critical",  "color": "FF0000", "description": "Must fix immediately" },
+  { "name": "~priority: high",      "color": "D93F0B", "description": "Should be done soon" },
+  { "name": "~priority: medium",    "color": "F9C513", "description": "Important but not blocking" },
+  { "name": "~priority: low",       "color": "0E8A16", "description": "Backlog item" },
+
+  { "name": "good first issue",     "color": "7057FF", "description": "Suitable for new contributors" },
+  { "name": "help wanted",          "color": "008672", "description": "Community contributions welcome" }
+]
