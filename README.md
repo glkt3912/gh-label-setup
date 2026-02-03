@@ -158,6 +158,10 @@ category: value
 - カテゴリ間で色が重複しない
 - priority は視認性重視 (赤=critical → 緑=low)
 
+## 活用ガイド
+
+日常のワークフローへの組み込み方は [docs/usage-guide.md](docs/usage-guide.md) を参照。
+
 ## ライセンス
 
 MIT
